@@ -32,9 +32,6 @@ get_conf_file() {
 	if [ ! -n "$DBDATABASE" ]; then
 		error_exit "Database missing in $configFile"
 	fi
-	if [ -n "$BACKUP_PATH" ]; then
-		backupPath=$BACKUP_PATH
-	fi
 }
 
 run_backup() {
@@ -55,9 +52,6 @@ if [ -x $mysqldump ]; then
 	error_exit "$mysqldump: command doesn't exists"
 fi
 
-# Load the config file and check the mandatory configuration
-get_conf_file
-
 # Parse the arguement befor the actual db backup
 for key in "$@"
 do
@@ -72,6 +66,9 @@ do
 		;;
 	esac
 done
+
+# Load the config file and check the mandatory configuration
+get_conf_file
 
 # Run the backup itself
 run_backup
